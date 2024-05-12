@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:codefast/data/models/torneio_model.dart';
 import 'package:codefast/homepage.dart';
 import 'package:codefast/operacao.dart';
+import 'package:codefast/operacao_eliminatoria.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,11 +22,17 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => MyHomePage(title: 'Codefast - Operação'),
-        '/operacao': (context) => Operacao(),
-        '/operacao-eliminatoria': (context) =>
-            OperacaoEliminatoria(), // Adicione a rota para OperacaoEliminatoria
-        '/operacao-mata-mata': (context) =>
-            OperacaoMataMata(), // Adicione a rota para OperacaoEliminatoriaF
+
+        '/operacao': (context) => OperacaoTorneio(
+            torneio:
+                ModalRoute.of(context)?.settings.arguments as TorneioModel),
+
+        '/operacao-eliminatoria': (context) => OperacaoEliminatoria(
+            torneio: ModalRoute.of(context)?.settings.arguments
+                as TorneioModel), // Adicione a rota para OperacaoEliminatoria
+
+        // '/operacao-mata-mata': (context) =>
+        //     OperacaoMataMata(), // Adicione a rota para OperacaoEliminatoriaF
       },
     );
   }

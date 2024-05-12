@@ -1,34 +1,17 @@
-import 'dart:convert';
-import 'package:codefast/homepage.dart';
+import 'package:codefast/data/models/torneio_model.dart';
+import 'package:codefast/operacao_eliminatoria.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
-class Operacao extends StatelessWidget {
+class OperacaoTorneio extends StatelessWidget {
+  final TorneioModel torneio;
+
+  OperacaoTorneio({required this.torneio});
+
   @override
   Widget build(BuildContext context) {
-    // Receber os argumentos passados para a rota
-    final Map<String, dynamic>? data =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-
-    // Verificar se os dados são válidos
-    if (data == null) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Error'),
-        ),
-        body: Center(
-          child: Text('Dados inválidos'),
-        ),
-      );
-    }
-
-    // Extrair o nome e outras informações do post
-    final String title = data['title'];
-    final String body = data['body'];
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(torneio.titulo),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -39,7 +22,13 @@ class Operacao extends StatelessWidget {
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/operacao-eliminatoria');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          OperacaoEliminatoria(torneio: torneio),
+                    ),
+                  );
                 },
                 icon: Icon(Icons.access_alarms),
                 label: Text('Eliminatória'),
@@ -55,7 +44,12 @@ class Operacao extends StatelessWidget {
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/operacao-mata-mata');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OperacaoMataMata(torneio: torneio),
+                    ),
+                  );
                 },
                 icon: Icon(Icons.account_tree_outlined),
                 label: Text('Mata-Mata'),
@@ -74,21 +68,11 @@ class Operacao extends StatelessWidget {
   }
 }
 
-class OperacaoEliminatoria extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Operação Eliminatória'),
-      ),
-      body: Center(
-        child: Text('Conteúdo da Operação Eliminatória'),
-      ),
-    );
-  }
-}
-
 class OperacaoMataMata extends StatelessWidget {
+  final TorneioModel torneio;
+
+  OperacaoMataMata({required this.torneio});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
