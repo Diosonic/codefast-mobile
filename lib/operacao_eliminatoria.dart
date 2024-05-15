@@ -62,6 +62,24 @@ class _OperacaoEliminatoriaState extends State<OperacaoEliminatoria> {
     }
   }
 
+    Future<void> _finalizarEtapa() async {
+    try {
+      final response = await http.put(
+          Uri.parse(
+              'http://localhost:5165/ControleEliminatoria/1/finalizarEtapaEliminatoria'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          });
+      if (response.statusCode == 200) {
+        store.getControleEliminatoria();
+      } else {
+        throw Exception('Failed to update data');
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
   Future<void> _alterarStatusValidacao(int id) async {
     try {
       final response = await http.put(
@@ -164,6 +182,33 @@ class _OperacaoEliminatoriaState extends State<OperacaoEliminatoria> {
     );
   }
 
+   void modalDeFinalizarEtapa() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Nova etapa"),
+          content: Text('Deseja começar uma nova etapa?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancelar"),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _finalizarEtapa();
+              },
+              child: Text("Confirmar"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -227,23 +272,32 @@ class _OperacaoEliminatoriaState extends State<OperacaoEliminatoria> {
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () {
-              _modalDeNovaRodada();
-            },
-            tooltip: 'Começar rodada',
-            child: Icon(Icons.play_arrow),
-          ),
-          SizedBox(height: 16), // Espaçamento entre os botões
-          FloatingActionButton(
-            onPressed: () {
-              _modalDeFinalizarRodada();
-            },
-            tooltip: 'Finalizar rodada',
-            child: Icon(Icons.stop),
-          ),
-        ],
+       children: [
+  FloatingActionButton(
+    onPressed: () {
+      _modalDeNovaRodada();
+    },
+    tooltip: 'Começar rodada',
+    child: Icon(Icons.play_arrow),
+  ),
+  SizedBox(height: 16), // Espaçamento entre os botões
+  FloatingActionButton(
+    onPressed: () {
+      _modalDeFinalizarRodada();
+    },
+    tooltip: 'Finalizar rodada',
+    child: Icon(Icons.stop),
+  ),    SizedBox(height: 16), // Espaçamento entre os botões
+
+  FloatingActionButton(
+    onPressed: () {
+      modalDeFinalizarEtapa();
+    },
+    tooltip: 'Finalizar etapa',
+    child: Icon(Icons.check), // Alterado para o ícone de finalizar etapa
+  ),
+],
+
       ),
     );
   }

@@ -31,8 +31,9 @@ class MyApp extends StatelessWidget {
             torneio: ModalRoute.of(context)?.settings.arguments
                 as TorneioModel), // Adicione a rota para OperacaoEliminatoria
 
-        // '/operacao-mata-mata': (context) =>
-        //     OperacaoMataMata(), // Adicione a rota para OperacaoEliminatoriaF
+        '/operacao-mata-mata': (context) => OperacaoMataMata(
+            torneio: ModalRoute.of(context)?.settings.arguments
+                as TorneioModel), // Adicione a rota para OperacaoEliminatoria
       },
     );
   }
