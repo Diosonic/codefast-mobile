@@ -1,5 +1,6 @@
 import 'package:codefast/data/models/torneio_model.dart';
 import 'package:codefast/operacao_eliminatoria.dart';
+import 'package:codefast/operacao_mata_mata.dart';
 import 'package:flutter/material.dart';
 
 class OperacaoTorneio extends StatelessWidget {
@@ -68,20 +69,20 @@ class OperacaoTorneio extends StatelessWidget {
   }
 }
 
-class OperacaoMataMata extends StatelessWidget {
-  final TorneioModel torneio;
+// class OperacaoMataMata extends StatelessWidget {
+//   final TorneioModel torneio;
 
-  OperacaoMataMata({required this.torneio});
+//   OperacaoMataMata({required this.torneio});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Operação Mata-Mata'),
-      ),
-      body: Center(
-        child: Text('Conteúdo da Operação Mata-Mata'),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Operação Mata-Mata'),
+//       ),
+//       body: Center(
+//         child: Text('Conteúdo da Operação Mata-Mata'),
+//       ),
+//     );
+//   }
+// }

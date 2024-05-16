@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'package:codefast/data/http/http_client.dart';
 import 'package:codefast/data/models/controle_mata_mata_model.dart';
 import 'package:codefast/data/models/torneio_model.dart';
-import 'package:codefast/data/repositories/operacao_mata_mata_repository.dart';
-import 'package:codefast/data/store/controle_mata_mata_store.dart';
+import 'package:codefast/data/repositories/controle_mata_mata_repository.dart';
+import 'package:codefast/data/store/controle_mata_mata.store.dart';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,25 +18,25 @@ class OperacaoMataMata extends StatefulWidget {
 }
 
 class _OperacaoMataMataState extends State<OperacaoMataMata> {
-  final ControleMataMataStore store = ControleMataMataStore(
-      repository: ControleMataMataRepository(client: HttpClient()));
+  final OperacaoMataMataStore store = OperacaoMataMataStore(
+      repository: OperacaoMataMataRepository(client: HttpClient()));
 
   @override
   void initState() {
     super.initState();
-    store.getControleMataMata();
+    store.getOperacaoMataMata();
   }
 
-  Future<void> _comecarRodada() async {
+  Future<void> _formarNovasChaves() async {
     try {
-      final response = await http.put(
+      final response = await http.post(
           Uri.parse(
-              'http://localhost:5165/OperacaoMataMata/1/iniciarRodada'),
+              'http://localhost:5165/ControleMataMata/1/preparar-etapa-mata-mata'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           });
       if (response.statusCode == 200) {
-        store.getControleMataMata();
+        store.getOperacaoMataMata();
       } else {
         throw Exception('Failed to update data');
       }
@@ -53,25 +54,7 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
             'Content-Type': 'application/json; charset=UTF-8',
           });
       if (response.statusCode == 200) {
-        store.getControleMataMata();
-      } else {
-        throw Exception('Failed to update data');
-      }
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  Future<void> _finalizarEtapa() async {
-    try {
-      final response = await http.put(
-          Uri.parse(
-              'http://localhost:5165/OperacaoMataMata/1/finalizarEtapaMataMata'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          });
-      if (response.statusCode == 200) {
-        store.getControleMataMata();
+        store.getOperacaoMataMata();
       } else {
         throw Exception('Failed to update data');
       }
@@ -83,7 +66,8 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
   Future<void> _alterarStatusValidacao(int id) async {
     try {
       final response = await http.put(
-          Uri.parse('http://localhost:5165/OperacaoMataMata/$id/equipes'),
+          Uri.parse(
+              'http://localhost:5165/ControleMataMata/$id/alterar-status-validacao'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -91,7 +75,28 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
             'statusValidacao': 'Validando',
           }));
       if (response.statusCode == 200) {
-        store.getControleMataMata();
+        store.getOperacaoMataMata();
+      } else {
+        throw Exception('Failed to update data');
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> _desclassificarEquipe(int id) async {
+    try {
+      final response = await http.put(
+          Uri.parse(
+              'http://localhost:5165/ControleMataMata/$id/desclassificar-equipe'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{
+            'statusValidacao': 'Validando',
+          }));
+      if (response.statusCode == 200) {
+        store.getOperacaoMataMata();
       } else {
         throw Exception('Failed to update data');
       }
@@ -128,13 +133,40 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
     );
   }
 
+  void _modalDesclassificacao(ControleMataMataModel item) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Desclassificação"),
+          content: Text('Deseja desclassificar a equipe ${item.equipe.nome}?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancelar"),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _desclassificarEquipe(item.id);
+              },
+              child: Text("Confirmar"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _modalDeNovaRodada() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Nova rodada"),
-          content: Text('Deseja começar uma nova rodada?'),
+          title: Text("Nova chave"),
+          content: Text('Deseja formar uma nova chave?'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -145,61 +177,7 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
             TextButton(
               onPressed: () async {
                 Navigator.of(context).pop();
-                await _comecarRodada();
-              },
-              child: Text("Confirmar"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _modalDeFinalizarRodada() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Finalizar rodada"),
-          content: Text('Deseja finalizar a rodada?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("Cancelar"),
-            ),
-            TextButton(
-              onPressed: () async {
-                Navigator.of(context).pop();
-                await _finalizarRodada();
-              },
-              child: Text("Confirmar"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _modalDeFinalizarEtapa() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Finalizar etapa"),
-          content: Text('Deseja finalizar a etapa?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("Cancelar"),
-            ),
-            TextButton(
-              onPressed: () async {
-                Navigator.of(context).pop();
-                await _finalizarEtapa();
+                await _formarNovasChaves();
               },
               child: Text("Confirmar"),
             ),
@@ -234,6 +212,9 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
                 return GestureDetector(
                   onTap: () {
                     _showConfirmationDialog(item);
+                  },
+                  onLongPress: () {
+                    _modalDesclassificacao(item);
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -277,25 +258,9 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
             onPressed: () {
               _modalDeNovaRodada();
             },
-            tooltip: 'Começar rodada',
+            tooltip: 'Montar nova chave',
             child: Icon(Icons.play_arrow),
-          ),
-          SizedBox(height: 16), // Espaçamento entre os botões
-          FloatingActionButton(
-            onPressed: () {
-              _modalDeFinalizarRodada();
-            },
-            tooltip: 'Finalizar rodada',
-            child: Icon(Icons.stop),
-          ),
-          SizedBox(height: 16), // Espaçamento entre os botões
-          FloatingActionButton(
-            onPressed: () {
-              _modalDeFinalizarEtapa();
-            },
-            tooltip: 'Finalizar etapa',
-            child: Icon(Icons.check),
-          ),
+          )
         ],
       ),
     );

@@ -14,8 +14,8 @@ class OperacaoMataMataRepository implements IOperacaoMataMataRepository {
 
   @override
   Future<List<ControleMataMataModel>> getOperacaoMataMata() async {
-    final response = await client.get(
-        url: 'http://localhost:5165/OperacaoMataMata/1/equipes');
+    final response =
+        await client.get(url: 'http://localhost:5165/ControleMataMata/1/');
 
     if (response.statusCode == 200) {
       final List<ControleMataMataModel> operacaoMataMata = [];

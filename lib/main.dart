@@ -4,6 +4,7 @@ import 'package:codefast/data/models/torneio_model.dart';
 import 'package:codefast/homepage.dart';
 import 'package:codefast/operacao.dart';
 import 'package:codefast/operacao_eliminatoria.dart';
+import 'package:codefast/operacao_mata_mata.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 

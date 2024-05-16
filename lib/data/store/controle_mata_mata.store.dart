@@ -1,5 +1,5 @@
 import 'package:codefast/data/models/controle_mata_mata_model.dart';
-import 'package:codefast/data/repositories/operacao_mata_mata_repository.dart';
+import 'package:codefast/data/repositories/controle_mata_mata_repository.dart';
 import 'package:flutter/material.dart';
 
 class OperacaoMataMataStore {
