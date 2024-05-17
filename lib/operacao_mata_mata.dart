@@ -108,7 +108,7 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
     try {
       final response = await http.put(
           Uri.parse(
-              'http://localhost:5165/ControleMataMata/$id/transformar-em-terceiro'),
+              'http://localhost:5165/ControleMataMata/$id/disputar-terceiro-lugar'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -233,17 +233,34 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
                           ],
                         ),
                         child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4), // Reduzido o padding interno aqui
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           child: Center(
-                            child: Text(
-                              item.equipe.nome,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  item.equipe.nome,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.delete),
+                                  onPressed: () {
+                                    _showDialog(
+                                      title: "Desclassificação",
+                                      content:
+                                          'Deseja desclassificar a equipe ${item.equipe.nome}?',
+                                      onConfirm: () async {
+                                        await _desclassificarEquipe(item.id);
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
                             ),
                           ),
                         ),
