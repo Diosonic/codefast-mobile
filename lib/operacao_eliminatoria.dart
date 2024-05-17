@@ -30,7 +30,7 @@ class _OperacaoEliminatoriaState extends State<OperacaoEliminatoria> {
     try {
       final response = await http.put(
           Uri.parse(
-              'https://codefast-api-uninassau.azurewebsites.net/ControleEliminatoria/1/iniciarRodada'),
+              'http://localhost:5165/ControleEliminatoria/1/iniciarRodada'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           });
@@ -48,7 +48,7 @@ class _OperacaoEliminatoriaState extends State<OperacaoEliminatoria> {
     try {
       final response = await http.put(
           Uri.parse(
-              'https://codefast-api-uninassau.azurewebsites.net/ControleEliminatoria/1/finalizarRodadaAtual'),
+              'http://localhost:5165/ControleEliminatoria/1/finalizarRodadaAtual'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           });
@@ -66,7 +66,7 @@ class _OperacaoEliminatoriaState extends State<OperacaoEliminatoria> {
     try {
       final response = await http.put(
           Uri.parse(
-              'https://codefast-api-uninassau.azurewebsites.net/ControleEliminatoria/1/finalizarEtapaEliminatoria'),
+              'http://localhost:5165/ControleEliminatoria/1/finalizarEtapaEliminatoria'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           });
@@ -83,8 +83,7 @@ class _OperacaoEliminatoriaState extends State<OperacaoEliminatoria> {
   Future<void> _alterarStatusValidacao(int id) async {
     try {
       final response = await http.put(
-          Uri.parse(
-              'https://codefast-api-uninassau.azurewebsites.net/ControleEliminatoria/$id/equipes'),
+          Uri.parse('http://localhost:5165/ControleEliminatoria/$id/equipes'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
