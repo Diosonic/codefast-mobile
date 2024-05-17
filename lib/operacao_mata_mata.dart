@@ -209,39 +209,48 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
               itemCount: store.state.value.length,
               itemBuilder: (_, index) {
                 final item = store.state.value[index];
-                return GestureDetector(
-                  onTap: () {
-                    _showConfirmationDialog(item);
-                  },
-                  onLongPress: () {
-                    _modalDesclassificacao(item);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 3,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4), // Reduzido o padding interno aqui
-                      child: Center(
-                        child: Text(
-                          item.equipe.nome,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 3,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4), // Reduzido o padding interno aqui
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              _showConfirmationDialog(item);
+                            },
                           ),
-                        ),
+                          Text(
+                            item.equipe.nome,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              _modalDesclassificacao(item);
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ),

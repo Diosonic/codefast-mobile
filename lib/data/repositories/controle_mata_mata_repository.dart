@@ -14,9 +14,8 @@ class OperacaoMataMataRepository implements IOperacaoMataMataRepository {
 
   @override
   Future<List<ControleMataMataModel>> getOperacaoMataMata() async {
-    final response = await client.get(
-        url:
-            'https://codefast-api-uninassau.azurewebsites.net/ControleMataMata/1');
+    final response =
+        await client.get(url: 'http://localhost:5165/ControleMataMata/1');
 
     if (response.statusCode == 200) {
       final List<ControleMataMataModel> operacaoMataMata = [];
