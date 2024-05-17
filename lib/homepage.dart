@@ -87,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // Future<void> _fetchData() async {
   //   try {
   //     final response =
-  //         await http.get(Uri.parse('http://localhost:5165/torneio'));
+  //         await http.get(Uri.parse('https://codefast-api-uninassau.azurewebsites.nettorneio'));
 
   //     if (response.statusCode == 200) {
   //       setState(() {

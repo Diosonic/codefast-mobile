@@ -30,7 +30,7 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
     try {
       final response = await http.post(
           Uri.parse(
-              'http://localhost:5165/ControleMataMata/1/preparar-etapa-mata-mata'),
+              'https://codefast-api-uninassau.azurewebsites.net/ControleMataMata/1/preparar-etapa-mata-mata'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           });
@@ -48,7 +48,7 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
     try {
       final response = await http.put(
           Uri.parse(
-              'http://localhost:5165/OperacaoMataMata/1/finalizarRodadaAtual'),
+              'https://codefast-api-uninassau.azurewebsites.net/OperacaoMataMata/1/finalizarRodadaAtual'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           });
@@ -66,7 +66,7 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
     try {
       final response = await http.put(
           Uri.parse(
-              'http://localhost:5165/ControleMataMata/$id/alterar-status-validacao'),
+              'https://codefast-api-uninassau.azurewebsites.net/ControleMataMata/$id/alterar-status-validacao'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -87,7 +87,7 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
     try {
       final response = await http.put(
           Uri.parse(
-              'http://localhost:5165/ControleMataMata/$id/desclassificar-equipe'),
+              'https://codefast-api-uninassau.azurewebsites.net/ControleMataMata/$id/desclassificar-equipe'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -108,7 +108,7 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
     try {
       final response = await http.put(
           Uri.parse(
-              'http://localhost:5165/ControleMataMata/$id/disputar-terceiro-lugar'),
+              'https://codefast-api-uninassau.azurewebsites.net/ControleMataMata/$id/disputar-terceiro-lugar'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -129,7 +129,7 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
     try {
       final response = await http.post(
           Uri.parse(
-              'http://localhost:5165/ControleMataMata/1/preparar-disputa-terceiro-lugar'),
+              'https://codefast-api-uninassau.azurewebsites.net/ControleMataMata/1/preparar-disputa-terceiro-lugar'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           });
@@ -246,19 +246,6 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                   ),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.delete),
-                                  onPressed: () {
-                                    _showDialog(
-                                      title: "Desclassificação",
-                                      content:
-                                          'Deseja desclassificar a equipe ${item.equipe.nome}?',
-                                      onConfirm: () async {
-                                        await _desclassificarEquipe(item.id);
-                                      },
-                                    );
-                                  },
                                 ),
                               ],
                             ),

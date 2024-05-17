@@ -14,7 +14,8 @@ class TorneioRepository implements ITorneioRepository {
 
   @override
   Future<List<TorneioModel>> getTorneio() async {
-    final response = await client.get(url: 'http://localhost:5165/torneio');
+    final response = await client.get(
+        url: 'https://codefast-api-uninassau.azurewebsites.net/torneio');
 
     if (response.statusCode == 200) {
       final List<TorneioModel> torneios = [];

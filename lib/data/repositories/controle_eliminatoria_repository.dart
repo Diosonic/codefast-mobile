@@ -16,7 +16,8 @@ class ControleEliminatoriaRepository
   @override
   Future<List<ControleEliminatoriaModel>> getControleEliminatoria() async {
     final response = await client.get(
-        url: 'http://localhost:5165/ControleEliminatoria/1/equipes');
+        url:
+            'https://codefast-api-uninassau.azurewebsites.net/ControleEliminatoria/1/equipes');
 
     if (response.statusCode == 200) {
       final List<ControleEliminatoriaModel> controleEliminatorias = [];
