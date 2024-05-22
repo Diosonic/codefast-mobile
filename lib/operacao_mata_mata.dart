@@ -20,6 +20,8 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
   final OperacaoMataMataStore store = OperacaoMataMataStore(
       repository: OperacaoMataMataRepository(client: HttpClient()));
 
+  bool _isPaused = false; // Variável para controlar o estado de pausa
+
   @override
   void initState() {
     super.initState();
@@ -30,7 +32,7 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
     try {
       final response = await http.post(
           Uri.parse(
-              'https://codefast-api-uninassau.azurewebsites.net/ControleMataMata/1/preparar-etapa-mata-mata'),
+              'http://localhost:5165/ControleMataMata/1/preparar-etapa-mata-mata'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           });
@@ -48,7 +50,7 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
     try {
       final response = await http.put(
           Uri.parse(
-              'https://codefast-api-uninassau.azurewebsites.net/OperacaoMataMata/1/finalizarRodadaAtual'),
+              'http://localhost:5165/OperacaoMataMata/1/finalizarRodadaAtual'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           });
@@ -66,7 +68,7 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
     try {
       final response = await http.put(
           Uri.parse(
-              'https://codefast-api-uninassau.azurewebsites.net/ControleMataMata/$id/alterar-status-validacao'),
+              'http://localhost:5165/ControleMataMata/$id/alterar-status-validacao'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -87,7 +89,7 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
     try {
       final response = await http.put(
           Uri.parse(
-              'https://codefast-api-uninassau.azurewebsites.net/ControleMataMata/$id/desclassificar-equipe'),
+              'http://localhost:5165/ControleMataMata/$id/desclassificar-equipe'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -108,7 +110,7 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
     try {
       final response = await http.put(
           Uri.parse(
-              'https://codefast-api-uninassau.azurewebsites.net/ControleMataMata/$id/disputar-terceiro-lugar'),
+              'http://localhost:5165/ControleMataMata/$id/disputar-terceiro-lugar'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -129,7 +131,7 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
     try {
       final response = await http.post(
           Uri.parse(
-              'https://codefast-api-uninassau.azurewebsites.net/ControleMataMata/1/preparar-disputa-terceiro-lugar'),
+              'http://localhost:5165/ControleMataMata/1/preparar-disputa-terceiro-lugar'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           });
@@ -172,6 +174,49 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
         );
       },
     );
+  }
+
+  void _togglePause() {
+    setState(() {
+      _isPaused = !_isPaused;
+    });
+  }
+
+  Future<void> _pauseUnpauseApiRequest() async {
+    try {
+      final response = await http.put(
+          Uri.parse('http://localhost:5165/Torneio/1/altera-status-tempo'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{
+            'paused': _isPaused,
+          }));
+      if (response.statusCode == 200) {
+        // Handle successful pause/unpause
+      } else {
+        throw Exception('Failed to update pause/unpause status');
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> _recomecarTempoApiRequest() async {
+    try {
+      final response = await http.put(
+          Uri.parse('http://localhost:5165/Torneio/1/resetar-status-tempo'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          });
+      if (response.statusCode == 200) {
+        // Handle successful restart time
+      } else {
+        throw Exception('Failed to restart time');
+      }
+    } catch (error) {
+      print(error);
+    }
   }
 
   @override
@@ -307,6 +352,23 @@ class _OperacaoMataMataState extends State<OperacaoMataMata> {
             },
             tooltip: 'Preparar disputa terceiro lugar',
             child: Icon(Icons.military_tech),
+          ),
+          SizedBox(height: 16),
+          FloatingActionButton(
+            onPressed: () async {
+              _togglePause();
+              await _pauseUnpauseApiRequest();
+            },
+            tooltip: 'Pausar/Continuar',
+            child: Icon(_isPaused ? Icons.play_arrow : Icons.pause),
+          ),
+          SizedBox(height: 16),
+          FloatingActionButton(
+            onPressed: () async {
+              await _recomecarTempoApiRequest();
+            },
+            tooltip: 'Reiniciar Tempo',
+            child: Icon(Icons.restart_alt),
           ),
         ],
       ),
